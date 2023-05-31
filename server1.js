@@ -15,7 +15,7 @@ app.use('/upload', function (req, res) {
   if (!fs.existsSync(dirUpload)) {
     fs.mkdirSync(dirUpload);
   }
-  //Chép file đã chọn vào nhưng chưa đổi tên
+
   form.parse(req, async (err, fields, files) => {
     //tên file tạm thời
     const oldpath = files.filetoupload.path; //upload_057f6ec8fe1c25a7b3a954174cfc51dc
@@ -35,7 +35,7 @@ app.use('/upload', function (req, res) {
     })
     console.log(urlUpload);
   });
-  res.send('File uploaded!');
+  res.redirect('/');
 })
 
 app.get('/', function (req, res) {
