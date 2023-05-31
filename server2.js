@@ -7,7 +7,7 @@ global.__basedir = __dirname;
 
 app.use(express.static(__dirname));
 
-app.use('/upload', async function (req, res, next) {
+app.use('/upload', async function (req, res) {
   try {
     await uploadFile(req, res);
 

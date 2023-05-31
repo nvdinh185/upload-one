@@ -6,7 +6,7 @@ const fs = require('fs');
 
 app.use(express.static(__dirname));
 
-app.use('/upload', function (req, res, next) {
+app.use('/upload', function (req, res) {
   const form = new formidable.IncomingForm();
   const dirUpload = "uploads/";
   form.uploadDir = dirUpload;
@@ -16,24 +16,30 @@ app.use('/upload', function (req, res, next) {
     fs.mkdirSync(dirUpload);
   }
   //Chép file đã chọn vào nhưng chưa đổi tên
-  form.parse(req, (err, fields, files) => {
+  form.parse(req, async (err, fields, files) => {
     //tên file tạm thời
     const oldpath = files.filetoupload.path; //upload_057f6ec8fe1c25a7b3a954174cfc51dc
     //tên file mới
     const newpath = form.uploadDir + files.filetoupload.name;
     //đổi tên file
-    fs.rename(oldpath, newpath, err => {
-      if (err) throw err;
-      // in ra đường dẫn file đã upload lên
-      const filePath = path.resolve(__dirname, newpath);
-      console.log(filePath);
-    });
+    const urlUpload = await new Promise((resolve, reject) => {
+      fs.rename(oldpath, newpath, err => {
+        if (err) {
+          reject("Error..." + err);
+        } else {
+          // trả về đường dẫn file đã upload lên
+          const filePath = path.resolve(__dirname, newpath);
+          resolve(filePath);
+        }
+      });
+    })
+    console.log(urlUpload);
   });
   res.send('File uploaded!');
 })
 
 app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, 'index1.html'));
+  res.sendFile(__dirname + '/index1.html');
 });
 
 // start server
