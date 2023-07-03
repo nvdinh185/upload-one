@@ -17,18 +17,18 @@ app.post('/upload', function (req, res) {
   }
 
   form.parse(req, async (err, fields, files) => {
-    //tên file tạm thời
-    const oldpath = files.filetoupload.path; //upload_057f6ec8fe1c25a7b3a954174cfc51dc
-    //tên file mới
-    const newpath = form.uploadDir + files.filetoupload.name;
-    //đổi tên file
+    var fileName = files['file'].name;
+    // đường dẫn thực file upload lên
+    var newName = `${dirUpload}/${fileName}`;
+    var oldpath = files['file'].path;
+    // đổi tên file
     const urlUpload = await new Promise((resolve, reject) => {
-      fs.rename(oldpath, newpath, err => {
+      fs.rename(oldpath, newName, err => {
         if (err) {
           reject("Error..." + err);
         } else {
           // trả về đường dẫn file đã upload lên
-          const filePath = path.resolve(__dirname, newpath);
+          const filePath = path.resolve(__dirname, newName);
           resolve(filePath);
         }
       });
@@ -39,9 +39,9 @@ app.post('/upload', function (req, res) {
 })
 
 app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/index1.html');
+  res.sendFile(__dirname + '/index2.html');
 });
 
 // start server
-const port = process.env.PORT || 4000;
+const port = 3000;
 app.listen(port, () => console.log(`Server is starting on port ${port}...`));

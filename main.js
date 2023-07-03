@@ -5,6 +5,7 @@ form.addEventListener('submit', async function (e) {
 
     const formData = new FormData();
     formData.append("file", e.target[0].files[0]);
+
     await axios({
         method: "POST",
         url: "http://localhost:3000/upload",
