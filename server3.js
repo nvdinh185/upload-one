@@ -16,24 +16,16 @@ app.post('/upload', function (req, res) {
     fs.mkdirSync(dirUpload);
   }
 
-  form.parse(req, async (err, fields, files) => {
+  form.parse(req, (err, fields, files) => {
     var fileName = files['file'].name;
     // đường dẫn thực file upload lên
-    var newName = `${dirUpload}/${fileName}`;
-    var oldpath = files['file'].path;
+    var newPath = `${dirUpload}/${fileName}`;
+    var oldPath = files['file'].path;
     // đổi tên file
-    const urlUpload = await new Promise((resolve, reject) => {
-      fs.rename(oldpath, newName, err => {
-        if (err) {
-          reject("Error..." + err);
-        } else {
-          // trả về đường dẫn file đã upload lên
-          const filePath = path.resolve(__dirname, newName);
-          resolve(filePath);
-        }
-      });
-    })
-    console.log(urlUpload);
+    fs.renameSync(oldPath, newPath);
+    // đường dẫn file đã upload lên
+    const filePath = path.resolve(__dirname, newPath);
+    console.log(filePath);
   });
   res.redirect('/');
 })
