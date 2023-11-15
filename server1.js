@@ -18,22 +18,14 @@ app.post('/upload', function (req, res) {
 
   form.parse(req, async (err, fields, files) => {
     //tên file tạm thời
-    const oldpath = files.filetoupload.path; //upload_057f6ec8fe1c25a7b3a954174cfc51dc
+    const oldPath = files.filetoupload.path; //upload_057f6ec8fe1c25a7b3a954174cfc51dc
     //tên file mới
-    const newpath = form.uploadDir + files.filetoupload.name;
-    //đổi tên file
-    const urlUpload = await new Promise((resolve, reject) => {
-      fs.rename(oldpath, newpath, err => {
-        if (err) {
-          reject("Error..." + err);
-        } else {
-          // trả về đường dẫn file đã upload lên
-          const filePath = path.resolve(__dirname, newpath);
-          resolve(filePath);
-        }
-      });
-    })
-    console.log(urlUpload);
+    const newPath = form.uploadDir + files.filetoupload.name;
+    // đổi tên file
+    fs.renameSync(oldPath, newPath);
+    // đường dẫn file đã upload lên
+    const filePath = path.resolve(__dirname, newPath);
+    console.log(filePath);
   });
   res.redirect('/');
 })
